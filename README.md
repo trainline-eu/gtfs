@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/nerdEd/gtfs.svg?branch=master)](https://travis-ci.org/nerdEd/gtfs)
+[![Build Status](https://travis-ci.org/trainline-eu/gtfs.svg?branch=master)](https://travis-ci.org/trainline-eu/gtfs)
 
 ### GTFS Ruby
 
