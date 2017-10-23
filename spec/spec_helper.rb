@@ -11,11 +11,8 @@ require 'gtfs'
 
 require File.expand_path(File.dirname(__FILE__) + '/support/model_shared_examples')
 
-RSpec.configure do |config|
-  config.extend VCR::RSpec::Macros
-end
-
-VCR.config do |c|
+VCR.configure do |c|
   c.cassette_library_dir = File.join(File.dirname(__FILE__), '/fixtures/cassettes')
-  c.stub_with :fakeweb
+  c.hook_into :webmock
+  c.configure_rspec_metadata!
 end

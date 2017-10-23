@@ -14,38 +14,37 @@ describe GTFS::Source do
     let(:data_source) {valid_local_source}
     subject {GTFS::Source.build(data_source, opts)}
 
-    context 'with a url as a data root' do
-      use_vcr_cassette('valid_gtfs_uri')
-      let(:data_source) {'http://dl.dropbox.com/u/416235/work/valid_gtfs.zip'}
+    context 'with a url as a data root', :vcr do
+      let(:data_source) {'https://raw.githubusercontent.com/google/transit/master/gtfs/spec/en/examples/sample-feed-1.zip'}
 
-      it {should be_instance_of GTFS::URLSource}
-      its(:options) {should == GTFS::Source::DEFAULT_OPTIONS}
+      it { should be_instance_of GTFS::URLSource }
+      it { expect(subject.options).to eq GTFS::Source::DEFAULT_OPTIONS }
     end
 
     context 'with a file path as a data root' do
       let(:data_source) {valid_local_source}
 
       it {should be_instance_of GTFS::LocalSource}
-      its(:options) {should == GTFS::Source::DEFAULT_OPTIONS}
+      it { expect(subject.options).to eq GTFS::Source::DEFAULT_OPTIONS }
     end
 
     context 'with a file object as a data root' do
       let(:data_source) {File.open(valid_local_source)}
 
       it {should be_instance_of GTFS::LocalSource}
-      its(:options) {should == GTFS::Source::DEFAULT_OPTIONS}
+      it { expect(subject.options).to eq GTFS::Source::DEFAULT_OPTIONS }
     end
 
     context 'with options to disable strict checks' do
       let(:opts) {{strict: false}}
 
-      its(:options) {should == GTFS::Source::DEFAULT_OPTIONS.merge({strict: false})}
+      it { expect(subject.options).to eq GTFS::Source::DEFAULT_OPTIONS.merge({strict: false}) }
     end
   end
 
   describe '#new(source)' do
     it 'should not allow a base GTFS::Source to be initialized' do
-      lambda {GTFS::Source.new(valid_local_source)}.should raise_exception
+      expect { GTFS::Source.new(valid_local_source) }.to raise_exception('Cannot directly instantiate base GTFS::Source')
     end
   end
 
@@ -56,7 +55,7 @@ describe GTFS::Source do
       let(:source) {GTFS::Source.build(valid_local_source)}
 
       it {should_not be_empty}
-      its(:first) {should be_an_instance_of(GTFS::Agency)}
+      it { expect(subject.first).to be_an_instance_of(GTFS::Agency) }
     end
   end
 

@@ -1,21 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe GTFS::URLSource do
+describe GTFS::URLSource, :vcr do
   context 'with a URI to a valid source zip' do
-    let(:source_path) {'http://dl.dropbox.com/u/416235/work/valid_gtfs.zip'}
+    let(:source_path) {'https://raw.githubusercontent.com/google/transit/master/gtfs/spec/en/examples/sample-feed-1.zip'}
     it 'should create a new source successfully' do
-      VCR.use_cassette('valid_gtfs_uri') do
-        lambda {GTFS::URLSource.new(source_path, {})}.should_not raise_error(GTFS::InvalidSourceException)
-      end
+      expect { GTFS::URLSource.new(source_path, {}) }.not_to raise_error
     end
   end
 
-  context 'with a non-existent URI' do
-    let(:source_path) {'http://www.edschmalzle.com/gtfs.zip'}
+  context 'with a non-existent URI', :vcr do
+    let(:source_path) {'https://raw.githubusercontent.com/google/transit/master/gtfs/spec/en/examples/404.zip'}
     it 'should raise an exception' do
-      VCR.use_cassette('invalid_gtfs_uri') do
-        lambda {GTFS::URLSource.new(source_path, {})}.should raise_error(GTFS::InvalidSourceException)
-      end
+      expect { GTFS::URLSource.new(source_path, {}) }.to raise_error(GTFS::InvalidSourceException)
     end
   end
 end
