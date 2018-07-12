@@ -40,6 +40,13 @@ describe GTFS::Source do
 
       it { expect(subject.options).to eq GTFS::Source::DEFAULT_OPTIONS.merge({strict: false}) }
     end
+
+    context 'with options to specify a working directory' do
+      let(:data_source) {valid_local_source}
+      let(:opts) {{workingDirectory: FileUtils.mkdir_p("#{File.dirname(valid_local_source)}/tmp").first}}
+
+      it { expect(subject.options).to eq GTFS::Source::DEFAULT_OPTIONS.merge({workingDirectory: "#{File.dirname(valid_local_source)}/tmp"}) }
+    end
   end
 
   describe '#new(source)' do
