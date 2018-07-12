@@ -13,14 +13,19 @@ module GTFS
     OPTIONAL_SOURCE_FILES = ENTITIES.reject(&:required_file?).map(&:filename)
     SOURCE_FILES = ENTITIES.map(&:filename)
 
-    DEFAULT_OPTIONS = {strict: true, encoding: "utf-8"}
+    DEFAULT_OPTIONS = {strict: true, encoding: "utf-8", workingDirectory: nil}
 
     attr_accessor :source, :archive, :options
 
     def initialize(source, opts={})
       raise 'Source cannot be nil' if source.nil?
 
-      @tmp_dir = Dir.mktmpdir
+      if opts[:workingDirectory] != nil
+        @tmp_dir = opts[:workingDirectory]
+      else
+        @tmp_dir = Dir.mktmpdir
+      end
+
       ObjectSpace.define_finalizer(self, self.class.finalize(@tmp_dir))
 
       @source = source
