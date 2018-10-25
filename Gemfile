@@ -7,3 +7,4 @@ gem 'simplecov', :require => false
 gem 'rubyzip', '~> 1.1'
 gem 'vcr'
 gem 'webmock'
+gem 'csv'
